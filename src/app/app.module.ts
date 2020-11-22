@@ -14,13 +14,22 @@ import { AppRoutes } from './app.routing';
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 import { LoginComponent } from './login/login.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { RegisterComponent } from './register/register.component';
+import { AuthorizationService } from './services/Auth/authorization.service';
+import { EnsureAuthenticatedService } from './services/Auth/ensure-authenticated.service';
+import { LoginRedirectService } from './services/Auth/login-redirect.service';
+import { LogoutComponent } from './pages/logout/logout.component';
+import { AuthInterceptor } from './interceptors/auth.interceptor';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     AdminLayoutComponent,
-    LoginComponent
+    LoginComponent,
+    RegisterComponent,
+    LogoutComponent
   ],
   imports: [
     BrowserAnimationsModule,
@@ -33,9 +42,20 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     FooterModule,
     FixedPluginModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    HttpClientModule
   ],
-  providers: [],
+  providers: [
+    AuthorizationService,
+    EnsureAuthenticatedService,
+    LoginRedirectService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    }
+  ],
+
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 
 import { AdminLayoutRoutes } from './admin-layout.routing';
 
@@ -10,18 +9,29 @@ import { UserComponent }            from '../../pages/user/user.component';
 import { TableComponent }           from '../../pages/table/table.component';
 import { TypographyComponent }      from '../../pages/typography/typography.component';
 import { IconsComponent }           from '../../pages/icons/icons.component';
-import { MapsComponent }            from '../../pages/maps/maps.component';
 import { NotificationsComponent }   from '../../pages/notifications/notifications.component';
 import { UpgradeComponent }         from '../../pages/upgrade/upgrade.component';
 
+import { MatChipsModule } from '@angular/material/chips';
+
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { MatFormFieldModule, MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatNativeDateModule } from '@angular/material/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
 
 @NgModule({
   imports: [
     CommonModule,
     RouterModule.forChild(AdminLayoutRoutes),
+    NgbModule,
+    MatChipsModule,
+    MatFormFieldModule,
+    MatAutocompleteModule,
+    MatNativeDateModule,
     FormsModule,
-    NgbModule
+    ReactiveFormsModule,
   ],
   declarations: [
     DashboardComponent,
@@ -30,8 +40,10 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     UpgradeComponent,
     TypographyComponent,
     IconsComponent,
-    MapsComponent,
     NotificationsComponent,
+  ],
+  providers: [
+    { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'fill' } },
   ]
 })
 

@@ -1,5 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { FormControl } from '@angular/forms';
+import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { MatChipInputEvent } from '@angular/material/chips';
 import Chart from 'chart.js';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 
 @Component({
@@ -14,10 +20,42 @@ export class DashboardComponent implements OnInit {
   public ctx;
   public chartColor;
 
-
   public areaChart;
   private pieChart;
   private linealChart;
+
+
+
+
+
+  visible: boolean = true;
+  selectable: boolean = true;
+  removable: boolean = true;
+  addOnBlur: boolean = false;
+
+  separatorKeysCodes = [ENTER, COMMA];
+
+  stockCtrl = new FormControl();
+
+  filteredStocks: Observable<any[]>;
+
+  stocks = [];
+
+  allstocks = [
+    'AAPL',
+    'AMZN',
+    'INTC',
+    'MSFT',
+    'CSCO'
+  ];
+
+
+  @ViewChild('stocksInput') stocksInput: ElementRef;
+
+  constructor() {
+    this.filteredStocks = this.stockCtrl.valueChanges.pipe(
+        map((stock: string | null) => stock ? this.filter(stock) : this.allstocks.slice()));
+  }
 
   ngOnInit() {
 
@@ -220,5 +258,42 @@ export class DashboardComponent implements OnInit {
       data: areaData,
       options: chartOptions
     });
+  }
+
+
+  add(event: MatChipInputEvent): void {
+    const input = event.input;
+    const value = event.value;
+
+    // Add our stock
+    if ((value || '').trim()) {
+      this.stocks.push(value.trim());
+    }
+
+    // Reset the input value
+    if (input) {
+      input.value = '';
+    }
+
+    this.stockCtrl.setValue(null);
+  }
+
+  remove(stock: any): void {
+    const index = this.stocks.indexOf(stock);
+
+    if (index >= 0) {
+      this.stocks.splice(index, 1);
+    }
+  }
+
+  filter(name: string) {
+    return this.allstocks.filter(stock =>
+        stock.toLowerCase().indexOf(name.toLowerCase()) === 0);
+  }
+
+  selected(event: MatAutocompleteSelectedEvent): void {
+    this.stocks.push(event.option.viewValue);
+    this.stocksInput.nativeElement.value = '';
+    this.stockCtrl.setValue(null);
   }
 }

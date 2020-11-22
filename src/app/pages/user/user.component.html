@@ -1,4 +1,55 @@
 <div class="row">
+<form>
+<mat-form-field class="demo-chip-list">
+  <mat-chip-list #chipList>
+    <mat-chip
+      *ngFor="let stock of stocks"
+      [selectable]="selectable"
+      [removable]="removable"
+      (removed)="remove(stock)">
+      {{stock}}
+      <mat-icon matChipRemove *ngIf="removable">X</mat-icon>
+    </mat-chip>
+    <input
+      placeholder="New stock..."
+      #stocksInput
+      [formControl]="stockCtrl"
+      [matAutocomplete]="auto"
+      [matChipInputFor]="chipList"
+      [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+      [matChipInputAddOnBlur]="addOnBlur"
+      (matChipInputTokenEnd)="add($event)"
+    />
+  </mat-chip-list>
+  <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+    <mat-option *ngFor="let stock of filteredStocks | async" [value]="stock">
+      {{ stock }}
+    </mat-option>
+  </mat-autocomplete>
+</mat-form-field>
+</form>
+<!--
+
+<form class="example-form">
+  <input type="text"
+         placeholder="Search for a street"
+         [formControl]="control"
+         [matAutocomplete]="auto">
+  <mat-autocomplete #auto="matAutocomplete">
+    <mat-option *ngFor="let street of filteredStreets | async" [value]="street">
+      {{street}}
+    </mat-option>
+  </mat-autocomplete>
+</form>
+-->
+</div>
+<br>
+<br>
+<br>
+
+
+
+<div class="row">
   <div class="col-md-4">
     <div class="card card-user">
       <div class="image">
@@ -54,6 +105,8 @@
         <ul class="list-unstyled team-members">
           <li>
             <div class="row">
+
+
               <div class="col-md-2 col-2">
                 <div class="avatar">
                   <img src="assets/img/faces/ayo-ogunseinde-2.jpg" alt="Circle Image" class="img-circle img-no-padding img-responsive">
@@ -108,6 +161,7 @@
                 <button class="btn btn-sm btn-outline-success btn-round btn-icon"><i class="fa fa-envelope"></i></button>
               </div>
             </div>
+
           </li>
         </ul>
       </div>
