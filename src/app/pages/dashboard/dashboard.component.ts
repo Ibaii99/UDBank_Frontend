@@ -30,7 +30,7 @@ export class DashboardComponent implements OnInit {
   private linealChart;
   private lineChart;
 
-  private leyenda: Leyend[] = [];
+  public leyenda: Leyend[] = [];
 
   visible: boolean = true;
   selectable: boolean = true;
