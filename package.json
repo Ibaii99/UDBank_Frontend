@@ -39,7 +39,7 @@
     "jsonwebtoken": "^8.5.1",
     "keycode": "^2.2.0",
     "material": "^0.4.3",
-    "moment": "2.29.1",
+    "moment": "^2.29.1",
     "ngx-toastr": "13.1.0",
     "rxjs": "6.6.3",
     "tslib": "2.0.2",

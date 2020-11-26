@@ -11,10 +11,10 @@ import { LogoutComponent } from 'app/pages/logout/logout.component';
 export const AdminLayoutRoutes: Routes = [
     { path: 'dashboard',      component: DashboardComponent },
     { path: 'user',           component: UserComponent },
-    { path: 'table',          component: TableComponent },
-    { path: 'typography',     component: TypographyComponent },
+    // { path: 'table',          component: TableComponent },
+    // { path: 'typography',     component: TypographyComponent },
     { path: 'icons',          component: IconsComponent },
-    { path: 'notifications',  component: NotificationsComponent },
+    // { path: 'notifications',  component: NotificationsComponent },
     { path: 'logout',         component: LogoutComponent },
 
 ];

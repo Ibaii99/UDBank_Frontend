@@ -1,14 +1,8 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { FormControl } from '@angular/forms';
-import { Observable } from 'rxjs';
-import {COMMA, ENTER} from '@angular/cdk/keycodes';
-import {ElementRef, ViewChild} from '@angular/core';
-import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
-import { MatChipInputEvent } from '@angular/material/chips';
-
-import {map, startWith} from 'rxjs/operators';
-
-
+import { Component } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { AuthorizationService } from 'app/services/Auth/authorization.service';
+import { map } from 'jquery';
 @Component({
     selector: 'user-cmp',
     templateUrl: 'user.component.html',
@@ -16,112 +10,63 @@ import {map, startWith} from 'rxjs/operators';
 })
 
 export class UserComponent {
+  formGroup: FormGroup;
 
-  // options: Brand[];
+  constructor(private fb: FormBuilder, private backend: AuthorizationService, private router:Router) {
+    this.formGroup = fb.group({
+      username: new FormControl('', Validators.required),
+      email: new FormControl('', Validators.required),
+      // password: new FormControl('', Validators.required),
+      // confirm_password: new FormControl('', Validators.required),
+      first_name: new FormControl('', Validators.required),
+      last_name: new FormControl('', Validators.required),
+      address: new FormControl(''),
+      city: new FormControl(''),
+      country: new FormControl(''),
+      postal_code: new FormControl(''),
+      about: new FormControl('')
+    });
 
-  // selectedOption: string;
+   }
 
-  // constructor() {
-  //   this.options = [
-  //     {name: 'Apple', code: 'AAPL', image:'https://static.finnhub.io/logo/87cb30d8-80df-11ea-8951-00000000092a.png'},
-  //     { name: 'Amazon', code: 'AMZN', image: 'https://static.finnhub.io/logo/967bf7b0-80df-11ea-abb4-00000000092a.png' }
-  //   ];
-  // }
-  // ngOnInit() {
-
-  // }
-
-
-
-
-  // control = new FormControl();
-  // streets: string[] = ['Champs-Élysées', 'Lombard Street', 'Abbey Road', 'Fifth Avenue'];
-  // filteredStreets: Observable<string[]>;
-
-  // ngOnInit() {
-  //   this.filteredStreets = this.control.valueChanges.pipe(
-  //     startWith(''),
-  //     map(value => this._filter(value))
-  //   );
-  // }
-
-  // private _filter(value: string): string[] {
-  //   const filterValue = this._normalizeValue(value);
-  //   return this.streets.filter(street => this._normalizeValue(street).includes(filterValue));
-  // }
-
-  // private _normalizeValue(value: string): string {
-  //   return value.toLowerCase().replace(/\s/g, '');
-  // }
+  ngOnInit(): void {
+    this.backend.description().then(
+      (info) => {
+        var json = JSON.parse(info);
+        console.log(json);
+        this.formGroup.controls.username.setValue(json.username);
+        this.formGroup.controls.email.setValue(json.email);
+        this.formGroup.controls.first_name.setValue(json.first_name);
+        this.formGroup.controls.last_name.setValue(json.last_name);
+        this.formGroup.controls.address.setValue(json.address);
+        this.formGroup.controls.city.setValue(json.city);
+        this.formGroup.controls.country.setValue(json.country);
+        this.formGroup.controls.postal_code.setValue(json.postal_code);
+        this.formGroup.controls.about.setValue(json.about);
+      });
 
 
+  }
 
 
-
-
-
-
-    visible: boolean = true;
-    selectable: boolean = true;
-    removable: boolean = true;
-    addOnBlur: boolean = false;
-
-    separatorKeysCodes = [ENTER, COMMA];
-
-    stockCtrl = new FormControl();
-
-    filteredStocks: Observable<any[]>;
-
-    stocks = [];
-
-    allstocks = [
-      'Apple',
-      'Lemon',
-      'Lime',
-      'Orange',
-      'Strawberry'
-    ];
-
-    @ViewChild('stocksInput') stocksInput: ElementRef;
-
-    constructor() {
-      this.filteredStocks = this.stockCtrl.valueChanges.pipe(
-          map((stock: string | null) => stock ? this.filter(stock) : this.allstocks.slice()));
-    }
-
-    add(event: MatChipInputEvent): void {
-      const input = event.input;
-      const value = event.value;
-
-      // Add our stock
-      if ((value || '').trim()) {
-        this.stocks.push(value.trim());
+  onModify() {
+    this.backend.update(this.formGroup.getRawValue()).then(
+      (user) => {
+        console.log(user);
+        localStorage.setItem('token', user.Authorization);
+        if (localStorage.token) {
+          console.log(localStorage.token);
+        }
+        else {
+        }
       }
+    );
 
-      // Reset the input value
-      if (input) {
-        input.value = '';
-      }
+  }
 
-      this.stockCtrl.setValue(null);
-    }
+  samePasswor(formGroup: FormGroup) {
+    return formGroup.get('password').value === formGroup.get('confirm_password').value ? null : { notSame: true }
+  }
 
-    remove(stock: any): void {
-      const index = this.stocks.indexOf(stock);
 
-      if (index >= 0) {
-        this.stocks.splice(index, 1);
-      }
-    }
-
-    filter(name: string) {
-      return this.allstocks.filter(stock =>
-          stock.toLowerCase().indexOf(name.toLowerCase()) === 0);
-    }
-
-    selected(event: MatAutocompleteSelectedEvent): void {
-      this.stocks.push(event.option.viewValue);
-      this.stocksInput.nativeElement.value = '';
-      this.stockCtrl.setValue(null);
-    }
 }
