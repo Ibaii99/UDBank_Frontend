@@ -4,14 +4,15 @@
   "license": "MIT",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "noder server.js",
     "deploy": "ng serve --host 0.0.0.0",
     "local": "ng serve -o",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "install:clean": "rm -rf node_modules/ && rm -rf package-lock.json && npm install && npm start"
+    "install:clean": "rm -rf node_modules/ && rm -rf package-lock.json && npm install && npm start",
+    "postinstall": "ng build --aot --prod"
   },
   "engines": {
     "node": "14.15"
@@ -49,6 +50,8 @@
     "rxjs": "6.6.3",
     "tslib": "2.0.2",
     "typescript": "4.0.3",
+    "@angular/cli": "^10.0.2",
+    "@angular/compiler-cli": "^10.1.5",
     "zone.js": "0.11.1"
   },
   "devDependencies": {
