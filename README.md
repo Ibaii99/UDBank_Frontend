@@ -2,7 +2,7 @@
 
 ## Requisitos
 
-### Node 11
+### Node 10
 
 ## Instalación
 
@@ -11,4 +11,12 @@
 
 ## Lanzar el frontend
 
+### Producción
+
 Ejecutar ```npm start```
+Navegar a localhost:5000 o 192.168.0.X:5000
+
+### Debug
+
+Ejecutar ```npm run deploy```
+Navegar a localhost:4200
