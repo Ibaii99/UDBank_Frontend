@@ -13,7 +13,8 @@
 
 ### Producción
 
-Ejecutar ```npm start```
+1. Ejecutar ```npm run build```
+2. Ejecutar ```npm start```
 Navegar a localhost:5000 o 192.168.0.X:5000
 
 ### Debug
